@@ -1,0 +1,506 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Courier New", monospace;
+}
+
+body {
+  background-color: #000;
+  color: #0f0;
+  height: 100vh;
+  overflow: hidden;
+  position: relative;
+}
+
+/* Matrix Background Effect */
+#matrix {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -2;
+  opacity: 0.3;
+}
+
+/* Scan Lines Overlay */
+.scanlines {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    to bottom,
+    transparent 50%,
+    rgba(0, 255, 0, 0.03) 50%
+  );
+  background-size: 100% 4px;
+  z-index: -1;
+  pointer-events: none;
+}
+
+/* Glitch Effect */
+.glitch {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+  opacity: 0.03;
+  z-index: -1;
+  pointer-events: none;
+}
+
+/* Main Container */
+.terminal-container {
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+}
+
+.terminal-window {
+  width: 100%;
+  max-width: 900px;
+  height: 85vh;
+  background-color: rgba(0, 10, 0, 0.85);
+  border: 1px solid #0f0;
+  border-radius: 0;
+  box-shadow:
+    0 0 20px rgba(0, 255, 0, 0.3),
+    inset 0 0 20px rgba(0, 255, 0, 0.1);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Terminal Header */
+.terminal-header {
+  background: linear-gradient(to right, #001100, #003300);
+  padding: 12px 20px;
+  border-bottom: 1px solid #0f0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.header-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.header-title i {
+  color: #0f0;
+  animation: blink 1.5s infinite;
+}
+
+@keyframes blink {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.3;
+  }
+}
+
+.header-title h1 {
+  font-size: 1.3rem;
+  letter-spacing: 2px;
+  text-shadow: 0 0 10px #0f0;
+}
+
+.header-controls {
+  display: flex;
+  gap: 10px;
+}
+
+.control-btn {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  border: none;
+  cursor: pointer;
+}
+
+.close {
+  background-color: #ff3333;
+}
+.minimize {
+  background-color: #ffcc00;
+}
+.maximize {
+  background-color: #00cc44;
+}
+
+/* Terminal Body */
+.terminal-body {
+  height: calc(100% - 50px);
+  padding: 20px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Terminal Output */
+.terminal-output {
+  flex: 1;
+  margin-bottom: 20px;
+  font-size: 0.95rem;
+  line-height: 1.4;
+}
+
+.output-line {
+  margin-bottom: 8px;
+  display: flex;
+  align-items: flex-start;
+}
+
+.prompt {
+  color: #0f0;
+  margin-right: 10px;
+  min-width: 160px;
+}
+
+.prompt::before {
+  content: "root@darknet:~$";
+  color: #0f0;
+  font-weight: bold;
+}
+
+.command {
+  color: #0f0;
+}
+
+.response {
+  color: #0a0;
+  margin-left: 10px;
+}
+
+.error {
+  color: #f00;
+  text-shadow: 0 0 5px #f00;
+}
+
+.success {
+  color: #0f0;
+  text-shadow: 0 0 5px #0f0;
+}
+
+.warning {
+  color: #ff0;
+}
+
+/* Login Form */
+.login-form {
+  background-color: rgba(0, 20, 0, 0.7);
+  border: 1px solid #0a0;
+  padding: 25px;
+  margin-top: 20px;
+  position: relative;
+}
+
+.login-form::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 1px;
+  background: linear-gradient(to right, transparent, #0f0, transparent);
+}
+
+.form-title {
+  color: #0f0;
+  margin-bottom: 20px;
+  font-size: 1.2rem;
+  text-align: center;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+}
+
+.input-group {
+  margin-bottom: 20px;
+  position: relative;
+}
+
+.input-label {
+  display: block;
+  margin-bottom: 8px;
+  color: #0a0;
+  font-size: 0.9rem;
+  letter-spacing: 1px;
+}
+
+.input-field {
+  width: 100%;
+  padding: 12px 15px;
+  background-color: rgba(0, 0, 0, 0.8);
+  border: 1px solid #0a0;
+  color: #0f0;
+  font-family: "Courier New", monospace;
+  font-size: 1rem;
+  letter-spacing: 1px;
+}
+
+.input-field:focus {
+  outline: none;
+  border-color: #0f0;
+  box-shadow: 0 0 10px rgba(0, 255, 0, 0.5);
+}
+
+.input-icon {
+  position: absolute;
+  right: 15px;
+  top: 35px;
+  color: #0a0;
+}
+
+.password-toggle {
+  position: absolute;
+  right: 40px;
+  top: 35px;
+  color: #0a0;
+  cursor: pointer;
+  z-index: 2;
+}
+
+.password-toggle:hover {
+  color: #0f0;
+}
+
+/* Terminal Buttons */
+.terminal-btn {
+  background-color: #001100;
+  border: 1px solid #0a0;
+  color: #0f0;
+  padding: 12px 25px;
+  font-family: "Courier New", monospace;
+  font-size: 0.9rem;
+  letter-spacing: 1px;
+  cursor: pointer;
+  transition: all 0.3s;
+  position: relative;
+  overflow: hidden;
+}
+
+.terminal-btn:hover {
+  background-color: #002200;
+  border-color: #0f0;
+  box-shadow: 0 0 10px rgba(0, 255, 0, 0.3);
+}
+
+.terminal-btn:active {
+  background-color: #000;
+}
+
+.terminal-btn::before {
+  content: ">";
+  position: absolute;
+  left: 8px;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.terminal-btn:hover::before {
+  opacity: 1;
+}
+
+.btn-container {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 25px;
+}
+
+/* Security Status */
+.security-status {
+  margin-top: 25px;
+  padding: 15px;
+  background-color: rgba(0, 10, 0, 0.7);
+  border: 1px dashed #0a0;
+}
+
+.status-title {
+  color: #0f0;
+  margin-bottom: 10px;
+  font-size: 0.9rem;
+  letter-spacing: 1px;
+}
+
+.status-bar {
+  width: 100%;
+  height: 10px;
+  background-color: #000;
+  border: 1px solid #0a0;
+  margin-bottom: 10px;
+  overflow: hidden;
+}
+
+.status-fill {
+  height: 100%;
+  width: 30%;
+  background-color: #0f0;
+  animation: scan 3s infinite linear;
+}
+
+@keyframes scan {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(400%);
+  }
+}
+
+.status-text {
+  color: #0a0;
+  font-size: 0.8rem;
+  display: flex;
+  justify-content: space-between;
+}
+
+/* Hacker Ticker */
+.hacker-ticker {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background-color: #001100;
+  border-top: 1px solid #0f0;
+  padding: 8px 0;
+  overflow: hidden;
+}
+
+.ticker-content {
+  white-space: nowrap;
+  animation: ticker 30s linear infinite;
+}
+
+@keyframes ticker {
+  0% {
+    transform: translateX(100%);
+  }
+  100% {
+    transform: translateX(-100%);
+  }
+}
+
+/* Connection Nodes */
+.nodes-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: -1;
+}
+
+.node {
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  background-color: #0f0;
+  border-radius: 50%;
+  box-shadow: 0 0 10px #0f0;
+}
+
+.connection {
+  position: absolute;
+  height: 1px;
+  background-color: rgba(0, 255, 0, 0.2);
+  transform-origin: 0 0;
+}
+
+/* Terminal Cursor */
+.cursor {
+  display: inline-block;
+  width: 8px;
+  height: 16px;
+  background-color: #0f0;
+  margin-left: 5px;
+  animation: blink-cursor 1s infinite;
+  vertical-align: middle;
+}
+
+@keyframes blink-cursor {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+}
+
+/* Access Log */
+.access-log {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  width: 300px;
+  background-color: rgba(0, 10, 0, 0.9);
+  border: 1px solid #0a0;
+  padding: 15px;
+  font-size: 0.8rem;
+  z-index: 1000;
+  display: none;
+}
+
+.log-title {
+  color: #f00;
+  margin-bottom: 10px;
+  font-weight: bold;
+  text-align: center;
+  border-bottom: 1px solid #0a0;
+  padding-bottom: 5px;
+}
+
+.log-entry {
+  color: #0a0;
+  margin-bottom: 5px;
+  font-family: "Courier New", monospace;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(0, 20, 0, 0.3);
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(0, 255, 0, 0.3);
+  border: 1px solid #0a0;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 255, 0, 0.5);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .terminal-window {
+    height: 90vh;
+  }
+
+  .prompt::before {
+    content: "~$";
+  }
+
+  .btn-container {
+    flex-direction: column;
+    gap: 15px;
+  }
+
+  .terminal-btn {
+    width: 100%;
+  }
+}
